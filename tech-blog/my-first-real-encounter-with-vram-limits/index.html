@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="no-js entry-page" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="My First Real Encounter With VRAM Limits">
+  <title>My First Real Encounter With VRAM Limits | Pacific Wharf</title>
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+  <script>
+    document.documentElement.classList.replace("no-js", "js");
+  </script>
+  <link rel="stylesheet" href="../../style.css">
+  <script src="../../script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand-lockup brand-link" href="../../index.html" aria-label="Go to homepage">
+        <div class="brand-mark" aria-hidden="true"><img src="../../apple-touch-icon.png" alt=""></div>
+        <div><p class="eyebrow">Pacific Wharf</p><p class="brand-subtitle">Technical creative workshop</p></div>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle-label">Menu</span>
+        <span class="menu-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="../">Tech Blog</a>
+        <a href="../../index.html#systems">Systems</a>
+        <a href="../../index.html#about">About</a>
+        <a href="../../index.html#contact">Contact</a>
+      </nav>
+    </header>
+    <main class="entry-main" id="main">
+      <section class="entry-hero">
+        <p class="section-label">Infrastructure entry / published May 18, 2026</p>
+        <h1 class="entry-title">My First Real Encounter With VRAM Limits</h1>
+        <p class="entry-lead">
+          Getting a local model running on the RTX 2060 felt like a breakthrough. Then I started asking the card to do
+          more, and VRAM made it clear who was actually in charge here.
+        </p>
+
+        <article class="entry-article">
+          <p>
+            After I got my first local LLM running, I made the completely reasonable mistake of assuming the hard part
+            was over. The model loaded. Tokens appeared. The machine did not burst into flames. No smoke came out of the case.
+          </p>
+          <p>
+            Naturally, I interpreted this as permission to go bigger and better.
+          </p>
+          <p>
+            I started trying more. Different models. Coding models. Chat models. Bigger models. Bigger is always better, right?
+            Well... turns out that wasn't exactly right. These newer and bigger models started choking. Hard.
+          </p>
+          <p>
+            At first, I thought the whole problem came down to model size.
+          </p>
+          <p>
+            A 3B model should be easy. A 7B model should be a little harder. A 20B model should be where the machine looks me
+            directly in the eye and asks why I am like this. But it should at least work, in theory, right? Remember quantization?
+            That should have fixed everything!
+          </p>
+          <p>
+            But it didn't. Not at all.
+          </p>
+          <p>
+            And that, kids, is how I met <s>your mother</s> the context window.
+          </p>
+
+          <h2>The Working Pile</h2>
+          <p>
+            In order to make life easier on myself, instead of typing launch commands in the console every time I wanted
+            to start up a different model or configuration (of which I had accumulated many), I made batch scripts to
+            save the configuration and run for me.
+          </p>
+          <p>
+            These scripts are simple. They are not polished documentation, and they're not amazing feats of architecture.
+            They are just little snapshots of me throwing models at an RTX 2060 and seeing what survived.
+          </p>
+          <p>
+            One that worked was Qwen2.5-Coder-7B, a dense model with 7.61 billion parameters and 28 layers, that I downloaded
+            as a Q4_K_M quantization:
+          </p>
+
+          <pre><code class="language-bat">
+docker run --rm -it --gpus all ^
+  -p 8082:8080 ^
+  -v F:\LocalAI\models\gguf:/models ^
+  ghcr.io/ggml-org/llama.cpp:server-cuda ^
+  -m /models/Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf ^
+  --host 0.0.0.0 ^
+  --port 8080 ^
+  -ngl 99 ^
+  -c 4096
+          </code></pre>
+
+          <p>
+            Note that I mapped the normal port 8080 to 8082 because I was already running a separate service on 8080.
+          </p>
+          <p>
+            That bad boy was getting somewhere between 15-18 tokens per second. That's not blazing fast, but it is certainly workable!
+            But... something was off. After one or two questions, it would start hallucinating like crazy, and it would
+            get itself into a loop where it would just print the same word over and over and over until I killed the process. But why?
+          </p>
+          
+          <p>
+            <strong>Context.</strong>
+          </p>
+          
+          </p>
+            Well, probably. There's a lot of things that could be causing that. But, in this case that was a driving factor.
+            That <code>-c 4096</code> flag was setting the context size to 4096 tokens. Think of the context as the short-term memory
+            of the conversation you're having with it. Longer context means it remembers more of what you talked about already.
+            That's why sometimes in a long chat, you'll find yourself telling the model things you already told it before. That tidbit
+            had rolled out of the context window.
+          </p>
+          <p>
+            It turns out, <i>especially</i> with a coding model, 4096 tokens is not enough context for the way I wanted to use it.
+            It can work fine for short conversations on a chat model, but not here. No big deal though, right?
+            Let's just bump that up. What could go wrong?
+          </p>
+          
+          <pre><code class="language-bat">
+docker run --rm -it --gpus all ^
+  -p 8082:8080 ^
+  -v F:\LocalAI\models\gguf:/models ^
+  ghcr.io/ggml-org/llama.cpp:server-cuda ^
+  -m /models/Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf ^
+  --host 0.0.0.0 ^
+  --port 8080 ^
+  -ngl 99 ^
+  -c 32768
+          </code></pre>
+          
+          <p>
+            Well... That didn't work. Tokens per second dropped to 1. Sometimes 2.
+          </p>
+          <p>
+            Oh.
+          </p>
+
+          <h2>The Context Window Ambush</h2>
+
+          <p>
+            The logs from that phase tell the story pretty clearly. The RTX 2060 has 6GB of VRAM total,
+            and when I tried to push Qwen2.5-Coder-7B with the full 32k context window, it needed more GPU memory than
+            the card could offer. That forced part of the workload out of VRAM and into system memory.
+          </p>
+          
+          <p>
+            The model weights aren't the whole story. The model also needs room for the conversation itself. The
+            longer the context window, the more working memory the model needs while it generates.
+            Llama.cpp even suggested cutting the context back down to 4096 tokens,
+            which would save roughly 1.6GB of VRAM.
+          </p>
+          <p>
+            But what was the big deal? I have 64GB of <i>system</i> RAM, wasn't I fine?
+          </p>
+          <p>
+            Well, yes, but also no.
+          </p>
+          <p>
+            Yes, it successfully offloaded everything it couldn't fit onto the system. But, because system RAM is
+            nowhere near as fast as VRAM, and the overhead involved with reaching out of the GPU
+            across to system RAM, waiting for it to get the data, and then send it back, is a massive bottleneck.
+            So, does it work? Absolutely. Is it painfully slow? You bet your ass it is.
+          </p>
+
+          <h2>The 2060 Was Doing Its Best</h2>
+          <p>
+            I do not want to sound unfair to the RTX 2060. That card did more than I expected.
+          </p>
+          <p>
+            It ran several of the 3B local language models just fine. It handled quantized 7B experiments, and it
+            did actually maintain a usable token generation rate on some of the later mixture of experts models I tried out.
+            It let me test infrastructure, launch servers, compare behavior, and learn the shape of the problem without
+            renting someone else&#8217;s machine. That was useful and important.
+          </p>
+          <p>
+            But the 2060 also taught me where enthusiasm stops and resource budgets begin.
+          </p>
+          <p>
+            Larger models pushed the card hard. Longer context windows made everything heavier. System RAM spillover
+            felt awful. Load times stretched. Token generation slowed down. The machine developed the emotional energy
+            of an old dot matrix printer asked to participate in a blockchain startup.
+          </p>
+          <p>
+            It could usually make things run.
+          </p>
+          <p>
+            It could not always make them run well.
+          </p>
+
+          <h2>The Setup Becomes a Tradeoff Machine</h2>
+
+          <p>
+            The important lesson is not &#8220;small GPUs are bad.&#8221; That would be too easy, and also wrong.
+          </p>
+          <p>
+            The real lesson is that VRAM is a budget. Every decision spends from it. Model size spends from
+            it. Context length spends from it. Moving part of the workload back to the CPU buys some back. So does quantization.
+          </p>
+          <p>But then there's the rest of the machine. Your operating system uses some of it. Windows demands a lot. So
+            does Chrome, and VS Code, and Discord, and on and on and on.
+          </p>
+          <p>
+            You have to stop asking, &#8220;What is the biggest model I can run?&#8221; and instead start asking,
+            &#8220;What work am I actually trying to do?&#8221;
+          </p>
+          <p>
+            After this phase, every launch script started looking like a set of compromises.
+          </p>
+          <p>
+            The model mattered. The quant mattered. The context window mattered. The number of GPU layers mattered.
+            The machine&#8217;s remaining memory mattered. The patience of the person sitting in front of the keyboard
+            definitely mattered.
+          </p>
+          <p>
+            I had been saying things like <code>Q4_K_M</code> without fully appreciating what those characters were
+            doing for me. They were not just part of the filename. They were the difference between a useful experiment
+            and a very warm box full of regret. Turns out, I needed to learn more about how that part actually worked.
+          </p>
+
+          <h2>Current Thoughts</h2>
+
+          <p>
+            I'm not going to tell you that the RTX 2060 is secretly some sleeper card that's powerful enough to do everything.
+            It does not have hidden reserves of magical compute waiting under the fan shroud. But, it is a solid little card!
+            Don't write off your 2060s just because they are older and have very little VRAM to work with.
+          </p>
+          <p>
+             The models and tooling have improved to the point where it can absolutely run a little local model for small tasks.
+             Later on, I even got it working with ComfyUI doing image and simple video generation. It wasn't fast, but it <i>did it</i>.
+          </p>
+          <p>
+            Local AI is within reach. Even with hardware as humble as the NVIDIA RTX 2060.
+          </p>
+        </article>
+        <p class="entry-rights-notice"><strong>Rights notice:</strong> Editorial content and published media for this entry are &copy; 2026 Pacific Wharf. All rights reserved. Site code and layout are licensed separately under MIT.</p>
+        <a class="back-link" href="../">Back to tech blog</a>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div>
+        <p>Pacific Wharf</p>
+        <p>Local AI systems, workflow engineering, and generation pipeline development. Let's solve your problems.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/PacificWharf" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.youtube.com/@PacificWharf" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="https://x.com/PacWharf" target="_blank" rel="noreferrer">X</a>
+        <a href="https://www.instagram.com/PacWharf" target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+      <p>&copy; <span id="current-year">2026</span> Pacific Wharf</p>
+    </footer>
+  </div>
+</body>
+</html>

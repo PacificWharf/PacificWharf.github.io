@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="no-js archive-page" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Pacific Wharf tech blog covering local AI workflows, training notes, hardware limits, infrastructure, and implementation details."
+  >
+  <title>Tech Blog | Pacific Wharf</title>
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+  <script>
+    document.documentElement.classList.replace("no-js", "js");
+  </script>
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js" defer></script>
+</head>
+<body id="tech-blog-top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand-lockup brand-link" href="../index.html" aria-label="Go to homepage">
+        <div class="brand-mark" aria-hidden="true">
+          <img src="../apple-touch-icon.png" alt="">
+        </div>
+        <div>
+          <p class="eyebrow">Pacific Wharf</p>
+          <p class="brand-subtitle">Technical creative workshop</p>
+        </div>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle-label">Menu</span>
+        <span class="menu-toggle-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="#tech-blog-top">Tech Blog</a>
+        <a href="../index.html#systems">Systems</a>
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main class="archive-main" id="main">
+      <section class="archive-hero">
+        <p class="section-label">Tech Blog</p>
+        <h1 class="archive-title">Technical notes from the workshop.</h1>
+        <p class="archive-lead">
+          A running collection of Pacific Wharf posts on local AI systems, training runs, hardware limits,
+          infrastructure, and workflow engineering.
+        </p>
+
+        <a class="back-link" href="../index.html">Return to homepage</a>
+      </section>
+
+      <section class="content-section reveal">
+
+        <div class="archive-search">
+          <label class="archive-search-label" for="archive-search">Filter posts</label>
+          <input
+            class="archive-search-input"
+            id="archive-search"
+            type="search"
+            placeholder="Search by title or summary"
+            autocomplete="off"
+          >
+        </div>
+
+        <p class="archive-empty-state" id="archive-empty-state" hidden>No posts match that search.</p>
+
+        <div class="archive-grid" id="archive-grid">
+          <a
+            class="experiment-card experiment-link archive-card"
+            href="first-local-lora-training-run/"
+            aria-label="Open First Local LoRA Training Run entry"
+            data-filter-card
+          >
+            <div class="card-signal">
+              <time datetime="2026-05-20">May 20, 2026</time>
+              <span>Training</span>
+            </div>
+            <h3>First Local LoRA Training Run</h3>
+            <p>Pacific Wharf's first completed local LoRA run, covering setup, runtime, checkpoints, and why proving the pipeline matters.</p>
+            <span class="card-cta">Open entry</span>
+          </a>
+
+          <a
+            class="experiment-card experiment-link archive-card"
+            href="successfully-running-a-local-llm-on-an-rtx-2060/"
+            aria-label="Open Successfully Running a Local LLM on an RTX 2060 entry"
+            data-filter-card
+          >
+            <div class="card-signal">
+              <time datetime="2026-05-15">May 15, 2026</time>
+              <span>Local llm</span>
+            </div>
+            <h3>Successfully Running a Local LLM on an RTX 2060</h3>
+            <p>I just wanted to see if useful local AI workloads were actually practical on consumer hardware.</p>
+            <span class="card-cta">Open entry</span>
+          </a>
+
+          <a
+            class="experiment-card experiment-link archive-card"
+            href="my-first-real-encounter-with-vram-limits/"
+            aria-label="Open My First Real Encounter With VRAM Limits entry"
+            data-filter-card
+          >
+            <div class="card-signal">
+              <time datetime="2026-05-18">May 18, 2026</time>
+              <span>Infra / limits</span>
+            </div>
+            <h3>My First Real Encounter With VRAM Limits</h3>
+            <p>Getting a local model running on the RTX 2060 felt like a breakthrough. Then VRAM introduced itself as the adult in the room.</p>
+            <span class="card-cta">Open entry</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <p>Pacific Wharf</p>
+        <p>Local AI systems, workflow engineering, and generation pipeline development. Let's solve your problems.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/PacificWharf" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.youtube.com/@PacificWharf" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="https://x.com/PacWharf" target="_blank" rel="noreferrer">X</a>
+        <a href="https://www.instagram.com/PacWharf" target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+      <p>&copy; <span id="current-year">2026</span> Pacific Wharf</p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html class="no-js entry-page" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Pacific Wharf's first completed local SDXL LoRA training run, covering setup, runtime, checkpoints, and what proving the pipeline clarified."
+  >
+  <title>First Local LoRA Training Run | Pacific Wharf</title>
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+  <script>
+    document.documentElement.classList.replace("no-js", "js");
+  </script>
+  <link rel="stylesheet" href="../../style.css">
+  <script src="../../script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand-lockup brand-link" href="../../index.html" aria-label="Go to homepage">
+        <div class="brand-mark" aria-hidden="true">
+          <img src="../../apple-touch-icon.png" alt="">
+        </div>
+        <div>
+          <p class="eyebrow">Pacific Wharf</p>
+          <p class="brand-subtitle">Technical creative workshop</p>
+        </div>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle-label">Menu</span>
+        <span class="menu-toggle-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="../">Tech Blog</a>
+        <a href="../../index.html#systems">Systems</a>
+        <a href="../../index.html#about">About</a>
+        <a href="../../index.html#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main class="entry-main" id="main">
+      <section class="entry-hero">
+        <p class="section-label">Training entry / published May 20, 2026</p>
+        <h1 class="entry-title">First Local LoRA Training Run</h1>
+        <p class="entry-lead">
+          There&#8217;s something deeply satisfying about watching a machine spend nearly six hours cooking a
+          <code>.safetensors</code> file in your office while you keep getting more work done during the process.
+        </p>
+
+        <article class="entry-article">
+          <p>
+            This was the first full LoRA training run I&#8217;ve completed locally from start to finish.
+          </p>
+          <p>
+            Not rented compute.
+          </p>
+          <p>
+            Not a hosted service.
+          </p>
+          <p>
+            Not somebody else&#8217;s infrastructure.
+          </p>
+          <p>
+            An actual local training pass running on hardware sitting a few feet away from me.
+          </p>
+
+          <h2>The Setup</h2>
+          <p>This run used:</p>
+          <ul>
+            <li>Kohya SS</li>
+            <li>Juggernaut XL v11 (an SDXL-derived checkpoint)</li>
+            <li>CUDA acceleration</li>
+            <li>Float16 training</li>
+            <li>Local custom dataset</li>
+            <li>Local storage</li>
+            <li>Local GPU (5070 Ti)</li>
+          </ul>
+          <p>The training process ran for:</p>
+          <ul>
+            <li>10 epochs</li>
+            <li>2,000 total steps</li>
+            <li>approximately 5 hours and 43 minutes</li>
+          </ul>
+          <p>The resulting model artifact: <code>kalisoc_v1.safetensors</code></p>
+          <p>
+            Checkpoints were configured to save once per epoch. Being able to compare intermediate outputs across
+            epochs makes the training process feel much less like black magic and much more like engineering.
+          </p>
+          <p>
+            Or at least engineering adjacent chaos.
+          </p>
+
+          <h2>What Surprised Me</h2>
+          <p>
+            The first thing that stood out was how normal the process eventually became. Not easy. Not polished.
+            Not stable in the &#8220;consumer appliance&#8221; sense. God knows I got irritated with the UI on Kohya SS
+            a few times.
+          </p>
+          <p>
+            But it was understandable. Once the environment was configured correctly, the workflow stopped
+            feeling mystical.
+          </p>
+          <p>
+            The second surprise was realizing the actual training run took less effort than curating the
+            dataset. Maybe I was just too much of a stickler for details. I&#8217;ll work on it.
+          </p>
+
+          <h2>The Actual Training Run</h2>
+          <p>The run stayed relatively stable throughout the process.</p>
+          <ul>
+            <li>Average loss hovered roughly between 0.096 - 0.109.</li>
+            <li>Step timing gradually increased over the course of the run, eventually settling around ~10 seconds per iteration</li>
+          </ul>
+          <p>
+            The training checkpoints completed successfully all the way through epoch 10 without catastrophic
+            failure, GPU crashes, or my entire machine deciding it no longer believed in electricity or God.
+          </p>
+          <p>
+            That alone felt like a win.
+          </p>
+
+          <h2>What This Experiment Was Really About</h2>
+          <p>
+            Honestly, this wasn&#8217;t about producing the perfect LoRA.
+          </p>
+          <p>
+            This was about proving the pipeline.
+          </p>
+          <p>
+            There&#8217;s a huge difference between watching tutorials, reading Reddit threads, and actually
+            running a full training cycle yourself on your own hardware.
+          </p>
+          <p>
+            Once you complete a run end-to-end, the entire system starts making more sense. The abstractions
+            start to fall away, and eventually you stop seeing black magic and start seeing interconnected
+            systems with tradeoffs everywhere.
+          </p>
+          <p>
+            At the end of the day, it&#8217;s just math.
+          </p>
+
+          <h2>Current Thoughts</h2>
+          <p>
+            This was the first full training run. Unfortunately, I&#8217;m exhausted at the end of the day and I
+            have to go set up a way to see how well it performed throughout all the epochs.
+          </p>
+          <p> Stay tuned and
+            we&#8217;ll find out.
+          </p>
+        </article>
+
+        <p class="entry-rights-notice">
+          <strong>Rights notice:</strong> Editorial content and published media for this entry are
+          &copy; 2026 Pacific Wharf. All rights reserved. Site code and layout are licensed separately under MIT.
+        </p>
+
+        <a class="back-link" href="../">Back to tech blog</a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <p>Pacific Wharf</p>
+        <p>Local AI systems, workflow engineering, and generation pipeline development. Let's solve your problems.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/PacificWharf" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.youtube.com/@PacificWharf" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="https://x.com/PacWharf" target="_blank" rel="noreferrer">X</a>
+        <a href="https://www.instagram.com/PacWharf" target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+      <p>&copy; <span id="current-year">2026</span> Pacific Wharf</p>
+    </footer>
+  </div>
+</body>
+</html>

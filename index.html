@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Pacific Wharf explores local AI workflows, ComfyUI systems, LoRA training, and experimental generation pipelines."
+  >
+  <title>Pacific Wharf | Technical Creative Workflows</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+  <script>
+    document.documentElement.classList.replace("no-js", "js");
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body id="site-top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand-lockup brand-link" href="#site-top" aria-label="Back to top">
+        <div class="brand-mark" aria-hidden="true">
+          <img src="apple-touch-icon.png" alt="">
+        </div>
+        <div>
+          <p class="eyebrow">Pacific Wharf</p>
+          <p class="brand-subtitle">Technical creative workshop</p>
+        </div>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle-label">Menu</span>
+        <span class="menu-toggle-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="tech-blog/">Tech Blog</a>
+        <a href="#systems">Systems</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="home">
+        <div class="hero-copy">
+          <p class="section-label">Local AI systems / workflow engineering / technical websites</p>
+          <h1>Technical systems for creative work.</h1>
+          <p class="hero-text">
+            Pacific Wharf helps creators and technical teams build reliable local AI workflows, improve LoRA
+            training and ComfyUI pipelines, debug unstable systems, and ship web surfaces that explain the work
+            clearly.
+          </p>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="mailto:hello@pacificwharf.dev">Start the conversation</a>
+            <a class="button button-secondary" href="tech-blog/">Browse the tech blog</a>
+          </div>
+
+          <ul class="social-strip" aria-label="Social links">
+            <li><a href="https://github.com/PacificWharf" target="_blank" rel="noreferrer">GitHub</a></li>
+            <li><a href="https://www.youtube.com/@PacificWharf" target="_blank" rel="noreferrer">YouTube</a></li>
+            <li><a href="https://x.com/PacWharf" target="_blank" rel="noreferrer">X / Twitter</a></li>
+            <li><a href="https://www.instagram.com/PacWharf" target="_blank" rel="noreferrer">Instagram</a></li>
+          </ul>
+        </div>
+
+        <aside class="hero-panel reveal" aria-label="Pacific Wharf services overview">
+          <div class="status-stack">
+            <article class="status-card">
+              <p class="status-label">Typical outcomes</p>
+              <p>Faster iteration, clearer systems, stronger training results, and web surfaces that earn trust.</p>
+            </article>
+            <article class="status-card hero-services-card">
+              <p class="status-label">I help with</p>
+              <ul class="hero-services-list">
+                <li>Local AI workflow design and optimization</li>
+                <li>ComfyUI pipeline debugging and cleanup</li>
+                <li>LoRA training evaluation and refinement</li>
+                <li>Web interfaces and proof-of-work surfaces</li>
+              </ul>
+            </article>
+          </div>
+        </aside>
+      </section>
+
+      <section class="content-section reveal" id="tech-blog">
+        <div class="section-heading">
+          <p class="section-label">Tech Blog</p>
+          <h2>Recent entries from the tech blog.</h2>
+          <p>
+            Technical notes from Pacific Wharf covering local AI systems, workflow engineering, hardware limits,
+            training runs, and the kind of implementation details that only show up once the work is actually running.
+          </p>
+          <div class="section-actions">
+            <a class="button button-secondary" href="tech-blog/">View all posts</a>
+          </div>
+        </div>
+
+        <div class="experiment-grid">
+          <a class="experiment-card experiment-link featured-card" href="tech-blog/first-local-lora-training-run/" aria-label="Open First Local LoRA Training Run entry">
+            <div class="card-signal">
+              <time datetime="2026-05-20">May 20, 2026</time>
+              <span>Training</span>
+            </div>
+            <h3>First Local LoRA Training Run</h3>
+            <p>
+              A first full local SDXL LoRA run, including setup, runtime, checkpoint behavior, and what changed once
+              the pipeline stopped feeling mystical.
+            </p>
+            <span class="card-cta">Read training note</span>
+          </a>
+
+          <a class="experiment-card experiment-link featured-card" href="tech-blog/successfully-running-a-local-llm-on-an-rtx-2060/" aria-label="Open Successfully Running a Local LLM on an RTX 2060 entry">
+            <div class="card-signal">
+              <time datetime="2026-05-15">May 15, 2026</time>
+              <span>Local llm</span>
+            </div>
+            <h3>Successfully Running a Local LLM on an RTX 2060</h3>
+            <p>
+              A 6GB RTX 2060 was enough to prove that useful local AI workloads were already possible on normal consumer hardware.
+            </p>
+            <span class="card-cta">Read local LLM note</span>
+          </a>
+
+          <a class="experiment-card experiment-link featured-card" href="tech-blog/my-first-real-encounter-with-vram-limits/" aria-label="Open My First Real Encounter With VRAM Limits entry">
+            <div class="card-signal">
+              <time datetime="2026-05-18">May 18, 2026</time>
+              <span>Infra / limits</span>
+            </div>
+            <h3>My First Real Encounter With VRAM Limits</h3>
+            <p>
+              A local LLM on an RTX 2060 worked just well enough to reveal the real constraint: not model loading,
+              but the way VRAM budgets collapse under actual workloads.
+            </p>
+            <span class="card-cta">Read hardware note</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="content-section systems-section reveal" id="systems">
+        <div class="section-heading">
+          <p class="section-label">Workflow focus</p>
+          <h2>Pacific Wharf builds AI workflows that hold up under real production use.</h2>
+          <p>
+            That includes helping you set up local AI, LoRA training, ComfyUI pipeline design, workflow debugging, benchmarking, and
+            infrastructure decisions. The goal is better output, fewer wasted iterations, and systems other
+            creators can actually rely on.
+          </p>
+        </div>
+
+        <div class="systems-layout">
+          <article class="systems-panel">
+            <p class="panel-label">What Pacific Wharf does</p>
+            <ul class="principles-list">
+              <li>Design and tune local AI workflows for repeatable creative output</li>
+              <li>Train and evaluate LoRAs with clear tradeoffs, not guesswork</li>
+              <li>Debug unstable pipelines, bottlenecks, and infrastructure problems</li>
+              <li>Turn experimentation into documented systems that other people can use</li>
+            </ul>
+          </article>
+
+          <article class="systems-panel metrics-panel">
+            <p class="panel-label">Working model</p>
+            <div class="metric-grid">
+              <div>
+                <span class="metric-value">05</span>
+                <span class="metric-label">Active workflow lanes</span>
+              </div>
+              <div>
+                <span class="metric-value">03</span>
+                <span class="metric-label">Core delivery surfaces</span>
+              </div>
+              <div>
+                <span class="metric-value">01</span>
+                <span class="metric-label">Direct technical partner</span>
+              </div>
+              <div>
+                <span class="metric-value" aria-label="Infinite">∞</span>
+                <span class="metric-label">Iteration cycles applied</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="systems-panel horizon-panel">
+            <p class="panel-label">How Pacific Wharf helps</p>
+            <div class="timeline-item">
+              <span class="timeline-phase">A</span>
+              <div>
+                <h3>Workflow design and optimization</h3>
+                <p>Build and refine local generation pipelines for speed, consistency, maintainability, and better output.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-phase">B</span>
+              <div>
+                <h3>Training and debugging support</h3>
+                <p>Improve LoRA training runs, troubleshoot weak results, and fix broken ComfyUI or video workflows.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-phase">C</span>
+              <div>
+                <h3>Infrastructure and implementation</h3>
+                <p>Set up practical local AI environments, benchmark hardware paths, and turn R&amp;D into usable systems.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section about-section reveal" id="about">
+        <div class="section-heading">
+          <p class="section-label">About</p>
+          <h2>Built for technical creative work close to the machinery.</h2>
+        </div>
+
+        <div class="about-layout">
+          <p>
+            Pacific Wharf is a technical field notebook and proof-of-work surface focused on local AI systems,
+            workflow engineering, LoRA training, cinematic experimentation, and generation pipeline development.
+          </p>
+          <p>
+            The work published here exists to document real-world experimentation, benchmark repeatable workflows,
+            and support technical services around training, debugging, infrastructure, and creative pipeline
+            engineering.
+          </p>
+        </div>
+      </section>
+
+      <section class="content-section web-section reveal" id="web-builds">
+        <div class="section-heading">
+          <p class="section-label">Web builds</p>
+          <h2>It works, but is it easy to use?</h2>
+          <p>
+            If the work is strong but the public-facing site is weak, generic, or hard to update, Pacific Wharf can
+            build the site as well. The goal is a web presence that explains the work clearly, earns trust quickly,
+            and stays simple to operate.
+          </p>
+        </div>
+
+        <div class="services-layout">
+          <article class="systems-panel">
+            <p class="panel-label">What gets built</p>
+            <h3>Static sites, landing pages, proof-of-work surfaces, and documentation-driven websites.</h3>
+            <p>
+              That includes branding-led homepages, project archives, service pages, lightweight documentation
+              surfaces, and GitHub Pages-friendly builds that do not drag in unnecessary backend complexity.
+            </p>
+          </article>
+
+          <article class="systems-panel">
+            <p class="panel-label">Why it works</p>
+            <ul class="principles-list">
+              <li>Clear structure and sharper copy instead of template filler</li>
+              <li>Responsive static builds with low maintenance and fast iteration</li>
+              <li>Technical credibility carried through the design, not buried under SaaS styling</li>
+              <li>Sites that support consulting, proof-of-work, and future publishing without becoming a burden</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section contact-section reveal" id="contact">
+        <div class="contact-panel">
+          <div>
+            <p class="section-label">Contact</p>
+            <h2>Need better workflows, stronger training results, or a website that matches the work?</h2>
+            <p>
+              Pacific Wharf helps creators and technical teams build local AI systems, improve training workflows,
+              fix unstable pipelines, and ship fast, credible web surfaces without unnecessary complexity.
+            </p>
+
+            <div class="channel-block">
+              <p class="channel-label">Publishing channels</p>
+              <ul class="channel-list" aria-label="Publishing channels">
+                <li>
+                  <a href="https://github.com/PacificWharf" target="_blank" rel="noreferrer">
+                    <span class="channel-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M12 2C6.48 2 2 6.58 2 12.23c0 4.52 2.87 8.35 6.84 9.71.5.1.68-.22.68-.5 0-.24-.01-1.05-.01-1.91-2.5.47-3.15-.63-3.35-1.21-.11-.3-.59-1.22-1-1.47-.34-.19-.82-.68-.01-.69.76-.01 1.3.71 1.48 1 .87 1.49 2.26 1.07 2.81.81.09-.65.34-1.07.61-1.31-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.04 1.03-2.76-.1-.26-.45-1.3.1-2.72 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.42.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.76 0 3.95-2.34 4.82-4.57 5.08.36.32.67.94.67 1.91 0 1.38-.01 2.49-.01 2.83 0 .27.18.6.69.5A10.25 10.25 0 0 0 22 12.23C22 6.58 17.52 2 12 2Z" fill="currentColor"/>
+                      </svg>
+                    </span>
+                    <span class="channel-text">PacificWharf</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.youtube.com/@PacificWharf" target="_blank" rel="noreferrer">
+                    <span class="channel-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M21.58 7.19a2.96 2.96 0 0 0-2.08-2.1C17.66 4.6 12 4.6 12 4.6s-5.66 0-7.5.49a2.96 2.96 0 0 0-2.08 2.1A30.7 30.7 0 0 0 2 12a30.7 30.7 0 0 0 .42 4.81 2.96 2.96 0 0 0 2.08 2.1c1.84.49 7.5.49 7.5.49s5.66 0 7.5-.49a2.96 2.96 0 0 0 2.08-2.1c.28-1.58.42-3.19.42-4.81s-.14-3.23-.42-4.81ZM10.2 15.06V8.94L15.5 12l-5.3 3.06Z" fill="currentColor"/>
+                      </svg>
+                    </span>
+                    <span class="channel-text">@PacificWharf</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://x.com/PacWharf" target="_blank" rel="noreferrer">
+                    <span class="channel-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M18.9 3H21l-4.6 5.26L22 21h-4.38l-3.43-4.89L9.9 21H7.8l4.92-5.62L2 3h4.5l3.1 4.42L13.5 3Zm-1.54 16.3h1.22L5.97 4.62H4.66Z" fill="currentColor"/>
+                      </svg>
+                    </span>
+                    <span class="channel-text">@PacWharf</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.instagram.com/PacWharf" target="_blank" rel="noreferrer">
+                    <span class="channel-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 1.8A3.7 3.7 0 0 0 3.8 7.5v9a3.7 3.7 0 0 0 3.7 3.7h9a3.7 3.7 0 0 0 3.7-3.7v-9a3.7 3.7 0 0 0-3.7-3.7h-9Zm9.75 1.35a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4ZM12 6.5A5.5 5.5 0 1 1 6.5 12 5.5 5.5 0 0 1 12 6.5Zm0 1.8A3.7 3.7 0 1 0 15.7 12 3.7 3.7 0 0 0 12 8.3Z" fill="currentColor"/>
+                      </svg>
+                    </span>
+                    <span class="channel-text">@PacWharf</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="contact-actions">
+            <a class="button button-primary" href="mailto:hello@pacificwharf.dev">Start the conversation</a>
+            <a class="button button-secondary" href="https://github.com/PacificWharf" target="_blank" rel="noreferrer">
+              Review the GitHub work
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <p>Pacific Wharf</p>
+        <p>Local AI systems, workflow engineering, and generation pipeline development. Let's solve your problems.</p>
+      </div>
+      <p>&copy; <span id="current-year">2026</span> Pacific Wharf</p>
+    </footer>
+  </div>
+</body>
+</html>

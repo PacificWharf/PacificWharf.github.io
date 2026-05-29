@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="no-js entry-page" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Successfully Running a Local LLM on an RTX 2060">
+  <title>Successfully Running a Local LLM on an RTX 2060 | Pacific Wharf</title>
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+  <script>
+    document.documentElement.classList.replace("no-js", "js");
+  </script>
+  <link rel="stylesheet" href="../../style.css">
+  <script src="../../script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand-lockup brand-link" href="../../index.html" aria-label="Go to homepage">
+        <div class="brand-mark" aria-hidden="true"><img src="../../apple-touch-icon.png" alt=""></div>
+        <div><p class="eyebrow">Pacific Wharf</p><p class="brand-subtitle">Technical creative workshop</p></div>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle-label">Menu</span>
+        <span class="menu-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="../">Tech Blog</a>
+        <a href="../../index.html#systems">Systems</a>
+        <a href="../../index.html#about">About</a>
+        <a href="../../index.html#contact">Contact</a>
+      </nav>
+    </header>
+    <main class="entry-main" id="main">
+      <section class="entry-hero">
+        <p class="section-label">Infrastructure entry / published May 15, 2026</p>
+        <h1 class="entry-title">Successfully Running a Local LLM on an RTX 2060</h1>
+        <p class="entry-lead">
+          For a long time, I assumed local AI was reserved for people with absurd workstation budgets and
+          datacenter-grade GPUs.
+        </p>
+        <article class="entry-article">
+          <p>
+            Then I started seeing people online claiming they were running local language models on hardware
+            that frankly had no business doing this kind of work. Naturally, I became skeptical. So of course, I decided to try it myself.
+          </p>
+          <p>
+            At the time, my machine was running an RTX 2060 with 6GB of VRAM. Not exactly the kind of hardware
+            people usually put in flashy YouTube thumbnails with titles like:
+          </p>
+          <p>
+            &#8220;THE FUTURE OF AI IS HERE!!!!!&#8221;
+          </p>
+          <p>
+            Still, I figured if the entire machine exploded, at least I&#8217;d learn something. My wife just told
+            me not to burn down the house.
+          </p>
+
+          <h2>The Goal</h2>
+          <p>
+            I wasn&#8217;t trying to build sentient machine intelligence in my office. I&#8217;ve seen Terminator,
+            too, and far more evil engineers than I are already working on that anyway. I just wanted to see if
+            useful local AI workloads were actually practical on consumer hardware.
+          </p>
+          <p>
+            Not theoretically. Not &#8220;technically if you sacrifice a goat under a full moon.&#8221;
+          </p>
+          <p>
+            Actually usable.
+          </p>
+          <p>
+            &#8230;Although I&#8217;m still not ruling out the goat.
+          </p>
+
+          <h2>The Initial Learning Curve</h2>
+          <p>
+            The first thing I discovered is that the local AI ecosystem has approximately the same level of user
+            friendliness as a pile of extension cords thrown into a washing machine.
+          </p>
+          <p>
+            At the time, I barely knew what GGUF meant, how quantization worked, why model sizes mattered, or
+            why everyone seemed emotionally attached to llama.cpp.
+          </p>
+          <p>
+            Every tutorial assumed different software, different folder structures, different launch commands,
+            different opinions about what was &#8220;obviously&#8221; the correct setup.
+          </p>
+          <p>
+            It&#8217;s overwhelming.
+          </p>
+          <p>
+            It&#8217;s also completely normal open source behavior.
+          </p>
+          <p>
+            Eventually I got llama.cpp running with CUDA acceleration and loaded my first model.
+          </p>
+          <p>
+            That moment was honestly kind of surreal.
+          </p>
+          <p>
+            And then, I too, caught feelings for llama.cpp.
+          </p>
+
+          <h2>What Actually Worked</h2>
+          <p>
+            To my surprise, the 2060 was far more capable than I expected.
+          </p>
+          <p>
+            Hardly infinite capability. Not magic. But usable. I had tokens generating, and I was actually
+            getting results.
+          </p>
+          <p>
+            Smaller quantized models were completely workable, especially for:
+          </p>
+          <ul>
+            <li>experimentation,</li>
+            <li>basic coding assistance,</li>
+            <li>local testing,</li>
+            <li>and infrastructure learning.</li>
+          </ul>
+          <p>
+            The biggest realization was that quantization and model compression change the entire conversation.
+            They are what allows all of this to actually work.
+          </p>
+          <p>
+            At the end of the day, it&#8217;s just math and memory management.
+          </p>
+          <p>
+            Very aggressive math and memory management, but still.
+          </p>
+
+          <h2>What Didn&#8217;t Work</h2>
+          <p>
+            The internet occasionally gives the impression that any GPU can run any model if you just believe
+            in yourself hard enough.
+          </p>
+          <p>
+            This is not entirely accurate. Or even partially accurate.
+          </p>
+          <p>
+            The 2060 absolutely had limits:
+          </p>
+          <ul>
+            <li>VRAM ceilings arrived quickly</li>
+            <li>larger context windows hurt</li>
+            <li>bigger models became painfully slow</li>
+            <li>memory spillover into system RAM was brutal</li>
+            <li>loading times escalated rapidly</li>
+          </ul>
+          <p>
+            I learned fast that &#8220;can technically load,&#8221; and &#8220;is actually usable,&#8221; are two completely
+            different categories. That distinction matters.
+          </p>
+          <p>
+            A lot.
+          </p>
+
+          <h2>The Important Realization</h2>
+          <p>
+            The most important takeaway wasn&#8217;t &#8220;the RTX 2060 is secretly a supercomputer.&#8221;
+          </p>
+          <p>
+            It&#8217;s not.
+          </p>
+          <p>
+            The important realization was that local AI experimentation has crossed a threshold where normal
+            enthusiast hardware can now meaningfully participate.
+          </p>
+          <p>
+            That changes everything.
+          </p>
+          <p>
+            Because once experimentation becomes accessible:
+          </p>
+          <ul>
+            <li>workflows emerge,</li>
+            <li>tooling improves,</li>
+            <li>understanding compounds,</li>
+            <li>and the systems stop feeling magical.</li>
+          </ul>
+          <p>
+            They start feeling engineerable. That was probably the moment Pacific Wharf really started, even if I didn&#8217;t realize it at the
+            time.
+          </p>
+
+          <h2>Naturally, This Escalated</h2>
+          <p>
+            Of course, once I proved local inference was possible, the project immediately spiraled into:
+          </p>
+          <ul>
+            <li>larger models,</li>
+            <li>better GPUs,</li>
+            <li>SDXL,</li>
+            <li>ComfyUI,</li>
+            <li>LoRA training,</li>
+            <li>WAN video generation,</li>
+            <li>benchmarking,</li>
+            <li>VRAM bottlenecks,</li>
+            <li>UPS load problems,</li>
+            <li>and a growing collection of folders with names that increasingly resemble industrial accidents.</li>
+          </ul>
+          <p>
+            In other words, this escalated exactly the way I should have expected.
+          </p>
+
+          <h2>Current Thoughts</h2>
+          <p>
+            The RTX 2060 is not a miracle machine. But, it proved something important: local AI has become
+            accessible long before I thought it ever would.
+          </p>
+          <p>
+            And once I realized that, the entire field became much more interesting.
+          </p>
+          <p>
+            Now, about that goat&#8230;
+          </p>
+        </article>
+        <p class="entry-rights-notice"><strong>Rights notice:</strong> Editorial content and published media for this entry are &copy; 2026 Pacific Wharf. All rights reserved. Site code and layout are licensed separately under MIT.</p>
+        <a class="back-link" href="../">Back to tech blog</a>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div>
+        <p>Pacific Wharf</p>
+        <p>Local AI systems, workflow engineering, and generation pipeline development. Let's solve your problems.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/PacificWharf" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.youtube.com/@PacificWharf" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="https://x.com/PacWharf" target="_blank" rel="noreferrer">X</a>
+        <a href="https://www.instagram.com/PacWharf" target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+      <p>&copy; <span id="current-year">2026</span> Pacific Wharf</p>
+    </footer>
+  </div>
+</body>
+</html>
