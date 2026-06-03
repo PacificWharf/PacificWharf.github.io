@@ -89,7 +89,7 @@
             run a model locally do not need to start there. You need the practical version.
           </p>
           <p>
-            Bottom line: quantization means it&#8217;s been compressed from its original size so it can run on smaller machines.
+            Bottom line: quantization means the model&#8217;s been compressed to lower precision so it uses less memory.
           </p>
           <p>
             Still here? Want more info? Cool, let&#8217;s keep talking about it.
@@ -167,7 +167,7 @@
           <h3>The Slightly More Accurate Version</h3>
           <p>
             For the purists out there, what&#8217;s really happening is we are taking a quantization range and the
-            number of bits is really giving us a range of &#8220;buckets&#8221; that we can put that number in to. For
+            number of bits is really giving us a range of &#8220;buckets&#8221; that we can put that number into. For
             example, 16 bit means 2^16, which is 65,536 of these buckets. As an example, let&#8217;s say we&#8217;re
             trying to represent a number in a known range: between 0 and 2. We have an original value of 0.98765432.
           </p>
@@ -279,7 +279,7 @@
           </p>
           <p>
             The <code>K</code> refers to a family of quantization methods used in the llama.cpp / GGUF ecosystem. The
-            <code>M</code> means medium. You may also see variants like <code>S</code> for smal. The details matter if
+            <code>M</code> means medium. You may also see variants like <code>S</code> for small. The details matter if
             you are comparing quants closely, but at the beginner level the important point is that <code>Q4_K_M</code>
             usually represents a practical compromise: small enough to run on constrained hardware, but not usually as
             degraded as the more extreme low-bit options.
