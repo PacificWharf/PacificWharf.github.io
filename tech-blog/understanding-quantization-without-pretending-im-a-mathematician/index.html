@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html class="no-js entry-page" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Understanding Quantization Without Pretending I&#8217;m a Mathematician"
+  >
+  <title>Understanding Quantization Without Pretending I&#8217;m a Mathematician | Pacific Wharf</title>
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+  <script>
+    document.documentElement.classList.replace("no-js", "js");
+  </script>
+  <link rel="stylesheet" href="../../style.css">
+  <script src="../../script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand-lockup brand-link" href="../../index.html" aria-label="Go to homepage">
+        <div class="brand-mark" aria-hidden="true">
+          <img src="../../apple-touch-icon.png" alt="">
+        </div>
+        <div>
+          <p class="eyebrow">Pacific Wharf</p>
+          <p class="brand-subtitle">Technical creative workshop</p>
+        </div>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle-label">Menu</span>
+        <span class="menu-toggle-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="../">Tech Blog</a>
+        <a href="../../index.html#systems">Systems</a>
+        <a href="../../index.html#about">About</a>
+        <a href="../../index.html#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main class="entry-main" id="main">
+      <section class="entry-hero">
+        <p class="section-label">Infrastructure entry / published June 3, 2026</p>
+        <h1 class="entry-title">Understanding Quantization Without Pretending I&#8217;m a Mathematician</h1>
+        <p class="entry-lead">
+          If you download local AI models for long enough, you start seeing filenames that look like somebody
+          mixed a model name with a firmware revision number.
+        </p>
+
+        <article class="entry-article">
+          <pre><code class="language-text">Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf</code></pre>
+
+          <p>
+            The first few parts are usually readable enough. <code>Qwen2.5-Coder</code> is the model family. <code>7B</code>
+            tells you the rough parameter count. <code>Instruct</code> means it was tuned to follow instructions instead
+            of just continuing text like a very expensive autocomplete machine (which, I mean&#8230; they kind of all are anyway).
+          </p>
+          <p>
+            Then you hit <code>Q4_K_M</code>, and the whole thing starts looking like a part number for a dishwasher pump.
+          </p>
+          <p>
+            That section isn&#8217;t just decorative. It tells you something important about how the model was compressed,
+            how much memory it probably needs, and what kind of quality tradeoff you are accepting before you even launch it.
+          </p>
+          <p>
+            That is quantization.
+          </p>
+          <p>
+            I&#8217;m not going to explain quantization by immediately diving into matrix math, floating-point formats,
+            tensor blocks, and calibration. I am not against the math. The math matters. But most people trying to
+            run a model locally do not need to start there. You need the practical version.
+          </p>
+          <p>
+            Bottom line: quantization means it&#8217;s been compressed from its original size so it can run on smaller machines.
+          </p>
+          <p>
+            Still here? Want more info? Cool, let&#8217;s keep talking about it.
+          </p>
+
+          <h2>The Basic Problem</h2>
+          <p>
+            A language model is mostly a huge collection of numbers.
+          </p>
+          <p>
+            Those numbers are called weights. During inference (i.e. chatting with the model), the model uses them
+            to process your prompt and predict what token should come next. It&#8217;s a very sophisticated version of
+            the social media game where you write &#8220;My favorite thing about science is&#8230;&#8221; and then you press
+            the middle auto-complete suggestion button thirty times and see what it says.
+          </p>
+          <p>
+            The model doesn&#8217;t read your question the way a person reads a question. It converts everything you typed
+            and everything it responds with into tokens that it moves through layers of math using a giant pile of learned
+            numeric relationships.
+          </p>
+          <p>
+            In other words: it&#8217;s just a giant fancy autocomplete.
+          </p>
+          <p>
+            The important part for local hardware is simple: all of those numbers have to be stored somewhere.
+          </p>
+          <p>
+            More parameters means more numbers need storing. More precise numbers need more memory. This is why model
+            size and precision matter so much when you are trying to run something on a consumer GPU instead of a
+            datacenter card that costs more than a used car.
+          </p>
+          <p>
+            A 7 billion parameter model stored in FP16 uses roughly 2 bytes per parameter. Back-of-the-napkin math
+            puts that around 14GB for the weights alone. So your 16GB graphics card should be able to run it no problem, right?
+            Well&#8230;
+          </p>
+          <p>
+            That 14GB requirement is before the context window. And runtime buffers. And GPU overhead. And Windows,
+            Docker, Chrome, VS Code, Discord, and whatever other software is standing around the VRAM buffet with a plate in its hand.
+          </p>
+          <p>
+            So when I was trying to run models on an RTX 2060 with 6GB of VRAM, full precision was not a serious
+            option for a lot of these models. The math just didn&#8217;t care how optimistic I felt. Quantization is the
+            only reason that GPU could run useful models in this class.
+          </p>
+
+          <h2>What Quantization Actually Means</h2>
+          <p>
+            Quantization means representing the model&#8217;s weights with less precision so they take up less memory.
+          </p>
+
+          <h3>The Easy to Understand Version</h3>
+          <p>
+            Instead of storing a weight with the full 16-bit precision it might have been trained with (models are not
+            universally trained in FP16; BF16, FP32, mixed precision, and other training/storage paths exist), you store
+            it with fewer bits. Maybe 8. Or 6. Or 4.
+          </p>
+          <p>
+            As a rough example, you can think of it like this:
+          </p>
+          <ul>
+            <li>16 bit: 1.051324765231459</li>
+            <li>8 bit: 1.0513248</li>
+            <li>6 bit: 1.05132</li>
+            <li>5 bit: 1.0513</li>
+            <li>4 bit: 1.051</li>
+            <li>3 bit: 1.05</li>
+            <li>2 bit: 1.0</li>
+          </ul>
+          <p>
+            The above example is a &#8220;bad-but-useful&#8221; one. This isn&#8217;t exactly how it works in computer
+            reality, but it&#8217;s a good way to wrap our feeble human brains around the concept.
+          </p>
+
+          <h3>The Slightly More Accurate Version</h3>
+          <p>
+            For the purists out there, what&#8217;s really happening is we are taking a quantization range and the
+            number of bits is really giving us a range of &#8220;buckets&#8221; that we can put that number in to. For
+            example, 16 bit means 2^16, which is 65,536 of these buckets. As an example, let&#8217;s say we&#8217;re
+            trying to represent a number in a known range: between 0 and 2. We have an original value of 0.98765432.
+          </p>
+          <ul>
+            <li>16 bit gives 65,536 possible buckets &#8594; 0.987655</li>
+            <li>8 bit gives 256 possible buckets &#8594; 0.988235</li>
+            <li>6 bit gives 64 possible buckets &#8594; 0.984127</li>
+            <li>5 bit gives 32 possible buckets &#8594; 0.967742</li>
+            <li>4 bit gives 16 possible buckets &#8594; 0.933333</li>
+            <li>3 bit gives 8 possible buckets &#8594; 0.857143</li>
+            <li>2 bit gives 4 possible buckets &#8594; 0.666667</li>
+          </ul>
+          <p>
+            So in reality, it&#8217;s not actually chopping decimals off the end of the number. It&#8217;s forcing the
+            number into a smaller representation that can be saved in RAM.
+          </p>
+          <p>
+            So why not just quantize away and make the models all smaller? Well, the lower you go, the less memory each
+            weight needs, but the more you risk damaging the model&#8217;s behavior.
+          </p>
+
+          <h3>An Example of Why This is Important</h3>
+          <p>
+            Let&#8217;s use a navigation example. You&#8217;re in an airplane flying around the world and trying to reach
+            a destination 3000 miles away. You calculate your course with extreme precision: Fly heading
+            121.1471413547794. That&#8217;s your full precision heading. But, I mean&#8230; that&#8217;s a LOT of decimals
+            to remember, right?
+          </p>
+          <p>
+            Let&#8217;s say instead of that you round it off a little to 121.14714. You fly that heading and maybe you
+            end up within 20 feet of where you were trying to go. Hey, that&#8217;s not bad. That&#8217;s perfectly fine!
+          </p>
+          <p>
+            So let&#8217;s round it a little more. Now you&#8217;re flying 121.147. Well, now you ended up about 300 yards
+            away from where you were trying to go, but that&#8217;s alright. You can still correct that. Let&#8217;s try
+            rounding it down to 121 now.
+          </p>
+          <p>
+            Well&#8230; now you ended up in a different city altogether. In another country.
+          </p>
+          <p>
+            So we have learned that at a certain point, the quantization starts affecting the behavior enough that it
+            stops being useful.
+          </p>
+
+          <h3>How This Applies to Large Language Models</h3>
+          <p>
+            A quantized 7B model will still have roughly 7 billion parameters. Quantization does not (usually) mean
+            you removed half the model. It means each weight got cheaper to store.
+          </p>
+          <p>
+            That distinction matters because people sometimes talk about quantized models as if they are simply
+            &#8220;smaller models.&#8221; They are compressed versions of larger models, not necessarily smaller architectures.
+            A quantized 7B model is not the same thing as a 3B model. It still has the structure and parameter count of
+            the 7B model, but its weights have been stored in a lower-precision format.
+          </p>
+          <p>
+            Quantization saves memory by accepting approximation.
+          </p>
+          <p>
+            The trick is finding out how much approximation the model can tolerate before the output gets worse in ways
+            you actually care about.
+          </p>
+
+          <h2>Why This Helps So Much</h2>
+          <p>
+            The reason quantization matters is not subtle: memory pressure drops fast when you stop storing every
+            weight in high precision.
+          </p>
+          <p>
+            A 7B model in FP16 can be far too large for a 6GB GPU. A 4-bit quantized version of that same general model
+            may become realistic enough to run locally, especially with tools like llama.cpp and GGUF files designed for
+            this kind of inference.
+          </p>
+          <p>
+            That does not mean the whole workload suddenly fits neatly and behaves perfectly. It means the weights
+            themselves became much cheaper to store. That is enough to turn some models from &#8220;absolutely not&#8221;
+            into &#8220;maybe, depending on context length and how much patience you brought with you.&#8221;
+          </p>
+          <p>
+            This is why <code>Q4</code> models show up constantly in local AI setups. They often land in a useful middle
+            ground. They are much smaller than FP16, they usually preserve enough of the model&#8217;s behavior to be useful,
+            and they give ordinary GPUs a chance to participate.
+          </p>
+          <p>
+            Not always a good chance. But a chance.
+          </p>
+          <p>
+            On my RTX 2060, that mattered. I was not trying to win benchmark charts. I was trying to get useful local
+            inference working on hardware that very clearly had opinions about the workload.
+          </p>
+
+          <h2>Reading <code>Q4_K_M</code></h2>
+          <p>
+            Take this filename again:
+          </p>
+          <pre><code class="language-text">Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf</code></pre>
+          <p>
+            The part we care about here is <code>Q4_K_M</code>.
+          </p>
+          <p>
+            <code>Q4</code> tells you this is roughly a 4-bit quantized model. I say &#8220;roughly&#8221; because real
+            quantization formats can get more complicated than &#8220;every number is stored in exactly four simple bits.&#8221;
+            Different tensors may be treated differently, and modern quantization schemes use additional metadata to
+            preserve more useful information than a naive conversion would.
+          </p>
+          <p>
+            For practical purposes, though, <code>Q4</code> means the model has been compressed pretty aggressively.
+          </p>
+          <p>
+            The <code>K</code> refers to a family of quantization methods used in the llama.cpp / GGUF ecosystem. The
+            <code>M</code> means medium. You may also see variants like <code>S</code> for smal. The details matter if
+            you are comparing quants closely, but at the beginner level the important point is that <code>Q4_K_M</code>
+            usually represents a practical compromise: small enough to run on constrained hardware, but not usually as
+            degraded as the more extreme low-bit options.
+          </p>
+          <p>
+            The <code>.gguf</code> extension is the file format. GGUF is commonly used with llama.cpp and related tools
+            for running models locally.
+          </p>
+          <p>
+            So the practical translation of that filename is something like this:
+          </p>
+          <blockquote>
+            <p>
+              This is a 7B instruction-tuned coding model, packaged for local inference, using a 4-bit-ish quantization
+              scheme that tries to balance memory savings against output quality.
+            </p>
+          </blockquote>
+
+          <h2>Quantization Is Not Free</h2>
+          <p>
+            The first mistake is thinking quantization ruins everything.
+          </p>
+          <p>
+            The second mistake is thinking it costs nothing.
+          </p>
+          <p>
+            Neither is true.
+          </p>
+          <p>
+            A well-quantized model can work extremely well. In casual chat, summarization, basic coding assistance, and
+            experimentation, you may not notice much quality loss at all. Some quantized models feel much better than you
+            would expect given how much smaller they are.
+          </p>
+          <p>
+            But compression still changes the model. Lower precision means the model has less detail available in its
+            weights. Sometimes that does not matter. Sometimes it shows up as a slightly flatter writing style, weaker
+            instruction following, sloppier code, worse reasoning, or more brittle behavior when a prompt gets complicated.
+          </p>
+          <p>
+            Coding is where I noticed this most. A chat model can get away with being a little vague. A coding model has
+            fewer places to hide. If it invents a function, imports a package that does not exist, or confidently gives
+            me the wrong method name, the problem becomes obvious very quickly.
+          </p>
+          <p>
+            That does not mean quantization caused every bad answer. Models make mistakes at full precision too. But
+            lower precision can make some weaknesses easier to trigger, especially when the model is already being pushed
+            by limited memory, long context, or awkward prompts.
+          </p>
+          <p>
+            This is why you cannot judge a quant only by whether it launches. A model can load successfully and still be
+            the wrong quant for the job.
+          </p>
+
+          <h2>Q4 Is a Compromise, Not a Personality Trait</h2>
+          <p>
+            Q4 gets used a lot because it is practical. It often gives you enough memory savings to run models that
+            would otherwise be out of reach while keeping enough quality to make the model useful.
+          </p>
+          <p>
+            That does not make Q4 the correct answer to every question.
+          </p>
+          <p>
+            Lower quants can save more memory, but they tend to carry more risk. A Q2 or Q3 model might be useful in
+            some situations, especially if you are extremely constrained, but you should expect more degradation. Higher
+            quants like Q5, Q6, or Q8 usually preserve more quality, but they demand more memory.
+          </p>
+          <p>
+            The right choice depends on the workload.
+          </p>
+          <p>
+            If I am testing a model casually, Q4 may be perfectly fine. If I am using the model for coding help and I
+            care about reliability, I may want Q5 or Q6 if the hardware can handle it. If I am trying to squeeze something
+            onto a tiny GPU just to see whether it works, I may accept a lower quant and lower my expectations accordingly.
+          </p>
+          <p>
+            The best quant is not the highest one you can technically load. It is the one that gives you the best
+            practical balance of quality, speed, memory use, and stability for the thing you are actually doing.
+          </p>
+          <p>
+            A model that produces slightly better answers but runs so slowly that I stop using it is not better in any
+            meaningful workflow sense.
+          </p>
+
+          <h2>Quantization Does Not Fix the Whole Workload</h2>
+          <p>
+            Quantization reduces the memory needed to store the model weights. That is a huge deal, but weights are not
+            the entire workload.
+          </p>
+          <p>
+            When you run a model, the machine also needs memory for the context and other runtime data. In llama.cpp
+            discussions, you will often see people talk about the KV cache. You do not need to understand every detail of
+            that term to understand the practical consequence: longer context windows require more memory while the model is running.
+          </p>
+          <p>
+            For simplicity, think of the context window as the LLM&#8217;s short term memory. Once you exceed the window,
+            it has to drop those tokens and it can&#8217;t remember them anymore unless you intentionally put them back in
+            (which will cause other tokens to fall out of context).
+          </p>
+          <p>
+            The implication is that a quantized model can fit into your GPU at 4096 tokens and become painful or impossible at 32768 tokens.
+          </p>
+          <p>
+            The model didn&#8217;t change. The workload changed.
+          </p>
+          <p>
+            This is what makes &#8220;it fits&#8221; such a slippery phrase in local AI. Fits with what context length?
+            Fits with how many layers on the GPU? Fits with what batch settings? Fits while the computer is also doing
+            normal computer things? Fits at a speed that will not make me wander away and reorganize the garage while
+            waiting for an answer?
+          </p>
+          <p>
+            Quantization helps with one major part of the memory problem. It does not repeal the laws of the rest of the system.
+          </p>
+          <p>
+            As an example of why this matters, I found that 4096 tokens was a perfectly acceptable context size for just
+            casual chatting with a simple model. I found that the same context size on a reasoning model would use almost
+            all of it thinking through its response to the point that I would only be able to get one or two prompts to it
+            before it forgot what we were doing. It was like talking to Dory from Finding Nemo.
+          </p>
+          <p>
+            Then, on a coder model, the 4096 context was almost worthless for me. It was enough to get the model to make
+            a scaffold function, but anything more serious than that and it crashed and burned.
+          </p>
+
+          <h2>Higher Precision Is Not Always Better in Practice</h2>
+          <p>
+            It is tempting to treat quantization like a simple quality ladder.
+          </p>
+          <p>
+            Q8 must be better than Q6. Q6 must be better than Q5. Q5 must be better than Q4. Q4 must be better than whatever cursed artifact lives below that.
+          </p>
+          <p>
+            In one narrow sense, that is usually the right direction. Higher precision generally preserves more of the
+            original model. If memory and speed were free, you would usually prefer less compression.
+          </p>
+          <p>
+            Memory and speed are not free.
+          </p>
+          <p>
+            If a higher-precision quant forces part of the workload out of VRAM and into system RAM, the model may
+            become miserable to use. If a Q5 model stays mostly on the GPU and runs smoothly while Q8 crawls, Q5 may be
+            the better local setup even if Q8 is more faithful to the original weights.
+          </p>
+          <p>
+            This is the part that makes local AI feel like systems work instead of shopping.
+          </p>
+          <p>
+            You are not choosing the &#8220;best&#8221; file in a vacuum. You are choosing the file that behaves best on
+            your actual hardware, with your actual context length, for your actual task, under the conditions you are
+            actually willing to tolerate.
+          </p>
+          <p>
+            That is less glamorous than downloading the largest file in the list.
+          </p>
+          <p>
+            It also works better.
+          </p>
+
+          <h2>What I Look For Now</h2>
+          <p>
+            When I look at a model file now, I pay attention to three things before anything else: the model size, the
+            quantization, and the context I expect to use.
+          </p>
+          <p>
+            The model size tells me the rough class of machine I am dealing with. A 3B model, a 7B model, and a 20B
+            model are not asking the same thing from the hardware.
+          </p>
+          <p>
+            The quantization tells me how aggressively the weights have been compressed. Q4 means the file has been
+            pushed down hard enough to become practical on smaller machines. Q5 and Q6 may preserve more quality if I can
+            afford the memory. Q8 is heavier still. FP16 is where small GPUs start pretending they did not hear the question.
+          </p>
+          <p>
+            The context length tells me how much working room the model needs once it starts running. This is the part
+            that can turn a model from usable to painful even when the quantized file itself looks reasonable.
+          </p>
+          <p>
+            So the question changes. Instead of asking, &#8220;What is the biggest model I can run?&#8221; I ask,
+            &#8220;What is the smallest and fastest version of this model that still does the job well enough?&#8221;
+          </p>
+          <p>
+            That sounds boring. It is also the difference between a local AI setup that you actually use and one that
+            exists mostly as a screenshot.
+          </p>
+
+          <h2>Current Thoughts</h2>
+          <p>
+            Quantization is not a magic trick. It is a memory tradeoff.
+          </p>
+          <p>
+            You store the model&#8217;s weights with less precision so the machine can fit and run something that would
+            otherwise be out of reach. In exchange, you accept some amount of approximation, and that approximation may
+            or may not matter depending on the model, the task, and how aggressive the quantization is.
+          </p>
+          <p>
+            That is the gist of it.
+          </p>
+          <p>
+            Once you understand that, filenames like <code>Q4_K_M</code> stop looking like nonsense and start looking like hardware notes.
+          </p>
+          <p>
+            Still ugly hardware notes.
+          </p>
+          <p>
+            But readable ones.
+          </p>
+        </article>
+
+        <p class="entry-rights-notice">
+          <strong>Rights notice:</strong> Editorial content and published media for this entry are
+          &copy; 2026 Pacific Wharf. All rights reserved. Site code and layout are licensed separately under MIT.
+        </p>
+
+        <a class="back-link" href="../">Back to tech blog</a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <p>Pacific Wharf</p>
+        <p>Local AI systems, workflow engineering, and generation pipeline development. Let's solve your problems.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/PacificWharf" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.youtube.com/@PacificWharf" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="https://x.com/PacWharf" target="_blank" rel="noreferrer">X</a>
+        <a href="https://www.instagram.com/PacWharf" target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+      <p>&copy; <span id="current-year">2026</span> Pacific Wharf</p>
+    </footer>
+  </div>
+</body>
+</html>
